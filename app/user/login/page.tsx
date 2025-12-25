@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Context } from "@/app/Store"
 
 /* ---------------- Schema ---------------- */
 
@@ -41,9 +42,14 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
+
+  const {loginApi} = React.useContext(Context) 
+
+
   const onSubmit = async (data: LoginFormValues) => {
     console.log("Login Data:", data)
-    // 🔐 connect auth logic here
+        loginApi(data)
+    
   }
 
   return (

@@ -2,31 +2,35 @@
 
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import RenderPosts from "@/components/posts/RenderPosts"
-
 import { posts } from "@/lib/mockData"
 import { useContext, useEffect } from "react"
 import { Context } from "@/app/Store"
-import { UserProfile } from "@/lib/types"
+import { Post, UserProfile } from "@/lib/types"
+import { useParams } from "next/navigation"
 
 
 export default function ProfilePage() {
 
+  const params = useParams() as { username?: string }
+  const username = params?.username ?? ""
 
 
-  const { user, fetchUserDetails } = useContext(Context) as {
+  const { user, userPosts, fetchUserDetails, fetchUserPosts } = useContext(Context) as {
     user: UserProfile
-    fetchUserDetails: () => void
+    userPosts: Post[]
+    fetchUserDetails: (username: string) => Promise<string>
+    fetchUserPosts: (userId: string) => void
   }
 
   useEffect(() => {
-      fetchUserDetails()
-    }, []
-  )
-
+    (async () => {
+      const userId = await fetchUserDetails(username)
+      fetchUserPosts(userId)
+    })()
+  }, [])
 
 
   return (
@@ -56,13 +60,13 @@ export default function ProfilePage() {
           {/* Stats */}
           <div className="flex gap-6 text-sm">
             <span>
-              <strong>{user.posts.length}</strong> posts
+              <strong>{user.posts && user.posts.length}</strong> posts
             </span>
             <span>
-              <strong>{user.followers.length}</strong> followers
+              <strong>{user.followers && user.followers.length}</strong> followers
             </span>
             <span>
-              <strong>{user.following.length}</strong> following
+              <strong>{user.following && user.following.length}</strong> following
             </span>
           </div>
 
@@ -79,32 +83,50 @@ export default function ProfilePage() {
 
       {/* Tabs */}
       <Tabs defaultValue="posts">
+
+
         <TabsList className="mx-auto flex w-fit">
+
           <TabsTrigger value="posts">Posts</TabsTrigger>
           <TabsTrigger value="stories">Stories</TabsTrigger>
           <TabsTrigger value="tagged">Tagged</TabsTrigger>
+
         </TabsList>
 
         {/* Posts Grid */}
+
+
+
         <TabsContent value="posts">
           <div className="mx-auto max-w-6xl px-4 py-6">
-            <RenderPosts posts={posts} />
+            <RenderPosts posts={userPosts} />
           </div>
         </TabsContent>
 
-        {/* Stories */}
+
+
+
+
         <TabsContent value="stories">
           <p className="text-center text-muted-foreground">
             Stories expire in 24 hours
           </p>
         </TabsContent>
 
-        {/* Tagged */}
+
+
+
+
+
         <TabsContent value="tagged">
           <p className="text-center text-muted-foreground">
             No tagged posts
           </p>
         </TabsContent>
+
+
+
+
       </Tabs>
     </div>
   )

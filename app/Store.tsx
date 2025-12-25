@@ -1,21 +1,19 @@
 "use client"
 
 
-import { users } from '@/lib/mockData'
 import { axiosInstance } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { createContext, useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
 
 
 
-
-
 export const Context = createContext()
 
-const Store = ({children } : { children: React.ReactNode }) => {
+const Store = ({ children }: { children: React.ReactNode }) => {
 
     const [store, setStore] = useState({
-        user: users[0],
+        user: {},
         userPosts: [],
         explorePosts: [],
         loading: false,
@@ -23,8 +21,24 @@ const Store = ({children } : { children: React.ReactNode }) => {
         postsRefresh: null
     })
 
+    const router = useRouter()
 
+    const loginApi = async (formData: {}) => {
+        try {
+            const response = await axiosInstance.post(`/user/login`, formData)   // API CALL
+            if (response.data.success) {
+                toast.success("login Succesfull") 
+                const username = response.data.payload
 
+                setTimeout(() => {
+                 router.push(`/user/profile/${username}`)
+                }, 2000);
+       
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const verifyUserApi = useCallback(
         async () => {
@@ -43,16 +57,15 @@ const Store = ({children } : { children: React.ReactNode }) => {
             }
         }, [])
 
-
     const fetchUserDetails = useCallback(
-        async () => {
+        async (username: string) => {
             try {
                 setStore(prev => ({ ...prev, loading: true }))
 
-                const response = await axiosInstance.get(`/user/userdetails`)   // API CALL
-                if (response.status === 200) {
+                const response = await axiosInstance.get(`/user/userdetails/${username}`)   // API CALL
+                if (response.data.success) {
                     setStore(prev => ({ ...prev, user: response.data.payload, loading: false }))
-
+                    return response.data.payload._id
                 }
 
             } catch (error) {
@@ -60,13 +73,12 @@ const Store = ({children } : { children: React.ReactNode }) => {
             }
         }, [store.userRefresh])
 
-
-
-    const fetchUserPosts = useCallback(async () => {
+    const fetchUserPosts = useCallback(async (userId: string) => {
         try {
             setStore(prev => ({ ...prev, loading: true }))
 
-            const res = await axiosInstance.get(`/posts/userPosts`)
+
+            const res = await axiosInstance.get(`/posts/user/${userId}`)
             if (res.data.success) {
                 setStore(prev => ({ ...prev, userPosts: res.data.payload, loading: false }))
             }
@@ -74,7 +86,6 @@ const Store = ({children } : { children: React.ReactNode }) => {
             console.log(error)
         }
     }, [store.postsRefresh])
-
 
     const fetchExplorePosts = useCallback(async () => {
         try {
@@ -89,8 +100,7 @@ const Store = ({children } : { children: React.ReactNode }) => {
         }
     }, [store.postsRefresh])
 
-
-    async function uploadPostAPI(formData : any) {
+    async function uploadPostAPI(formData: any) {
 
         try {
             setStore(prev => ({ ...prev, loading: true }))
@@ -223,6 +233,7 @@ const Store = ({children } : { children: React.ReactNode }) => {
         <Context.Provider
             value={{
                 ...store,
+                loginApi,
                 verifyUserApi,
                 fetchUserPosts,
                 fetchExplorePosts,
@@ -237,7 +248,7 @@ const Store = ({children } : { children: React.ReactNode }) => {
                 deleteComment
 
             }}>
-             {children}
+            {children}
         </Context.Provider>
 
     )

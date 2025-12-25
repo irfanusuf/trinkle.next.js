@@ -8,15 +8,14 @@ interface RenderPostsProps {
   layout?: "grid" | "feed"
 }
 
-export default function RenderPosts({
-  posts,
-  layout = "grid",
-}: RenderPostsProps) {
+export default function RenderPosts({posts, layout = "grid"}: RenderPostsProps) {
+
+  
   return (
     <div
       className={
         layout === "grid"
-          ? "grid grid-cols-2 gap-3 md:grid-cols-3"
+          ? "grid grid-cols-1 gap-3 md:grid-cols-3"
           : "flex flex-col gap-6"
       }
     >

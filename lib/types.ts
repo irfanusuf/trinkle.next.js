@@ -7,6 +7,7 @@ export interface Post {
 }
 
 export interface UserProfile {
+  _id : string
   username: string
   profilePic?: string
   bio?: string
