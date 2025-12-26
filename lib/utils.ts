@@ -9,8 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 
 
 export const axiosInstance = axios.create({
-  baseURL : "http://localhost:4000",
-  // baseURL: "https://trinklebuddies.onrender.com",
+  // baseURL : "http://localhost:4000",
+  baseURL: "https://trinklebuddies.onrender.com",
   withCredentials : true
 })
 
