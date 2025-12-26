@@ -1,57 +1,41 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import RenderPosts from "@/components/posts/RenderPosts"
-import { useContext, useEffect } from "react"
-import { Context } from "@/app/Store"
-import { Post, UserProfile } from "@/lib/types"
-import { useParams, useRouter } from "next/navigation"
-
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RenderPosts from "@/components/posts/RenderPosts";
+import { useContext, useEffect } from "react";
+import { Context } from "@/app/Store";
+import { Post, UserProfile } from "@/lib/types";
+import { useParams, useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-
-  const params = useParams() as { username?: string }
-  const username = params?.username ?? ""
-  const router = useRouter()
+  const params = useParams() as { username?: string };
+  const username = params?.username ?? "";
+  const router = useRouter();
 
   const { user, userPosts, fetchUserDetails, fetchUserPosts } = useContext(Context) as {
-
-    user: UserProfile
-    userPosts: Post[]
-    fetchUserDetails: (username: string) => Promise<string>
-    fetchUserPosts: (userId: string) => void
-
-  }
-
-
-
+    user: UserProfile;
+    userPosts: Post[];
+    fetchUserDetails: (username: string) => Promise<string>;
+    fetchUserPosts: (userId: string) => void;
+  };
 
   useEffect(() => {
-
-
     (async () => {
-      const userId = await fetchUserDetails(username)
+      const userId = await fetchUserDetails(username);
       if (userId) {
-        fetchUserPosts(userId)
+        fetchUserPosts(userId);
       } else {
-        router.push("/explore")
+        router.push("/explore");
       }
-
-    })()
-
-
-
-  }, [])
-
+    })();
+  }, [fetchUserDetails, fetchUserPosts]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
-
       <div className="flex flex-col gap-6 md:flex-row">
-
         <div className="flex justify-center md:w-1/3">
           <div className="relative h-36 w-36 overflow-hidden rounded-full border">
             <Image
@@ -77,18 +61,18 @@ export default function ProfilePage() {
               <strong>{user.posts && user.posts.length}</strong> posts
             </span>
             <span>
-              <strong>{user.followers && user.followers.length}</strong> followers
+              <strong>{user.followers && user.followers.length}</strong>{" "}
+              followers
             </span>
             <span>
-              <strong>{user.following && user.following.length}</strong> following
+              <strong>{user.following && user.following.length}</strong>{" "}
+              following
             </span>
           </div>
 
           {/* Bio */}
           {user.bio && (
-            <p className="max-w-md text-sm text-muted-foreground">
-              {user.bio}
-            </p>
+            <p className="max-w-md text-sm text-muted-foreground">{user.bio}</p>
           )}
         </div>
       </div>
@@ -97,19 +81,13 @@ export default function ProfilePage() {
 
       {/* Tabs */}
       <Tabs defaultValue="posts">
-
-
         <TabsList className="mx-auto flex w-fit">
-
           <TabsTrigger value="posts">Posts</TabsTrigger>
           <TabsTrigger value="stories">Stories</TabsTrigger>
           <TabsTrigger value="tagged">Tagged</TabsTrigger>
-
         </TabsList>
 
         {/* Posts Grid */}
-
-
 
         <TabsContent value="posts">
           <div className="mx-auto max-w-6xl px-4 py-6">
@@ -117,31 +95,18 @@ export default function ProfilePage() {
           </div>
         </TabsContent>
 
-
-
-
-
         <TabsContent value="stories">
-          <p className="text-center text-muted-foreground">
+          <p className="text-center text-muted-foreground  px-4 py-6 mt-10">
             Stories expire in 24 hours
           </p>
         </TabsContent>
 
-
-
-
-
-
         <TabsContent value="tagged">
-          <p className="text-center text-muted-foreground">
+          <p className="text-center text-muted-foreground px-4 py-6 mt-10">
             No tagged posts
           </p>
         </TabsContent>
-
-
-
-
       </Tabs>
     </div>
-  )
+  );
 }

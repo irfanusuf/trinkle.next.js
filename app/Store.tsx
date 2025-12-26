@@ -40,8 +40,6 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-
-
     const registerApi = async (formData: {}) => {
         try {
             const response = await axiosInstance.post(`/user/register`, formData)   // API CALL
@@ -59,12 +57,6 @@ const Store = ({ children }: { children: React.ReactNode }) => {
             console.log(error)
         }
     }
-
-
-
-
-
-
 
     const verifyUserApi = useCallback(
         async () => {
@@ -114,8 +106,6 @@ const Store = ({ children }: { children: React.ReactNode }) => {
     }, [store.postsRefresh])
 
 
-
-
     const fetchExplorePosts = useCallback(async () => {
         try {
             setStore(prev => ({ ...prev, loading: true }))
@@ -161,14 +151,17 @@ const Store = ({ children }: { children: React.ReactNode }) => {
 
     async function likeApi(postId: string) {
         try {
-
-
             const res = await axiosInstance.post(`/post/like/${postId}`)
             if (res.data.success) {
+                setStore(prev => ({...prev , postsRefresh: store.postsRefresh + 1}))
                 return true
+            }
+            else{
+                return false
             }
         } catch (error) {
             console.log(error)
+            return false
         }
     }
 

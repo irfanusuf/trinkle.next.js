@@ -20,6 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Context } from "@/app/Store"
 
+
 /* ---------------- Schema ---------------- */
 
 const loginSchema = z.object({
@@ -54,6 +55,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted px-4">
+
+   
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
