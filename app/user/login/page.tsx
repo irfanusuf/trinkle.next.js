@@ -47,7 +47,7 @@ export default function LoginPage() {
 
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log("Login Data:", data)
+        console.log("Login Data:", data)
         loginApi(data)
     
   }

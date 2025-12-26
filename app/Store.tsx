@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 
 
 
-export const Context = createContext()
+export const Context = createContext<any>(null)
 
 const Store = ({ children }: { children: React.ReactNode }) => {
 
@@ -17,8 +17,8 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         userPosts: [],
         explorePosts: [],
         loading: false,
-        userRefresh: null,
-        postsRefresh: null
+        userRefresh: 0,
+        postsRefresh: 0
     })
 
     const router = useRouter()
@@ -27,18 +27,44 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         try {
             const response = await axiosInstance.post(`/user/login`, formData)   // API CALL
             if (response.data.success) {
-                toast.success("login Succesfull") 
+                toast.success("login Succesfull")
                 const username = response.data.payload
 
                 setTimeout(() => {
-                 router.push(`/user/profile/${username}`)
+                    router.push(`/user/profile/${username}`)
                 }, 2000);
-       
+
             }
         } catch (error) {
             console.log(error)
         }
     }
+
+
+
+    const registerApi = async (formData: {}) => {
+        try {
+            const response = await axiosInstance.post(`/user/register`, formData)   // API CALL
+            if (response.data.success) {
+                toast.success("Register Succesfull")
+                
+                const username = response.data.payload
+
+                setTimeout(() => {
+                    router.push(`/user/profile/${username}`)
+                }, 2000);
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+
+
+
 
     const verifyUserApi = useCallback(
         async () => {
@@ -87,6 +113,9 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }, [store.postsRefresh])
 
+
+
+
     const fetchExplorePosts = useCallback(async () => {
         try {
             setStore(prev => ({ ...prev, loading: true }))
@@ -100,6 +129,9 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }, [store.postsRefresh])
 
+
+
+
     async function uploadPostAPI(formData: any) {
 
         try {
@@ -107,11 +139,10 @@ const Store = ({ children }: { children: React.ReactNode }) => {
             const res = await axiosInstance.post(`/post/create`, formData)
             if (res.data.success) {
                 // toast.success("Post uploaded Succesfully!")
-                setStore(prev => ({ ...prev, userRefresh: (refresh: number) => refresh + 1, postsRefresh: (refresh) => refresh + 1, loading: false }))
                 return true
             }
             return false
-        } catch (error) {
+        } catch (error : any) {
 
             if (error.response) {
                 const codesARR = [400, 401, 403, 404, 500]
@@ -128,27 +159,26 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function likeApi(postId) {
+    async function likeApi(postId: string) {
         try {
 
 
             const res = await axiosInstance.post(`/post/like/${postId}`)
             if (res.data.success) {
-                setStore(prev => ({ ...prev, postsRefresh: (refresh) => refresh + 1 }))
+                return true
             }
         } catch (error) {
             console.log(error)
         }
     }
 
-    async function commentApi(text, postId) {
+    async function commentApi(text: string, postId: string) {
         if (!text.trim()) return
         try {
 
             const res = await axiosInstance.post(`/post/comment/${postId}`, { text })
 
             if (res.data.success) {
-                setStore(prev => ({ ...prev, postsRefresh: (refresh) => refresh + 1 }))
                 return true
             } else {
                 return false
@@ -159,7 +189,7 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function replyApi(replyText, postId, commentId) {
+    async function replyApi(replyText: string, postId: string, commentId: string) {
         if (!replyText.trim()) return
         try {
 
@@ -182,7 +212,7 @@ const Store = ({ children }: { children: React.ReactNode }) => {
     async function shareApi() {
     }
 
-    async function reportComment(commentId) {
+    async function reportComment(commentId: string) {
         try {
 
             const res = await axiosInstance.post(`/post/comment/${commentId}/report`)
@@ -195,7 +225,7 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function editComment(editText, commentId) {
+    async function editComment(editText: string, commentId: string) {
         if (!editText.trim()) return
         try {
 
@@ -213,7 +243,7 @@ const Store = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function deleteComment(commentId) {
+    async function deleteComment(commentId: string) {
         if (!window.confirm("Are you sure you want to delete this comment?")) return
         try {
 
@@ -234,6 +264,7 @@ const Store = ({ children }: { children: React.ReactNode }) => {
             value={{
                 ...store,
                 loginApi,
+                registerApi,
                 verifyUserApi,
                 fetchUserPosts,
                 fetchExplorePosts,

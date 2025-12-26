@@ -1,15 +1,16 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Community from "@/components/home/Community";
+import Features from "@/components/home/Features";
+import Footer from "@/components/home/Footer";
+import Hero from "@/components/home/Hero";
 
-export default function Home() {
+
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-    
-
-
-
-
-    <Button variant={"default"}/> 
-    </div>
-  );
+    <main className="min-h-screen bg-background">
+      <Hero />
+      <Features />
+      <Community />
+      <Footer />
+    </main>
+  )
 }

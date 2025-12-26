@@ -18,11 +18,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Context } from "@/app/Store"
 
 /* ---------------- Schema ---------------- */
 
 const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
   username: z
     .string()
     .min(3, "Username must be at least 3 characters")
@@ -49,10 +49,32 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   })
 
-  const onSubmit = async (data: RegisterFormValues) => {
-    console.log("Register Data:", data)
-    // 🔐 Send to API (use FormData for avatar upload)
+
+  const { registerApi } = React.useContext(Context) as {
+    registerApi: (formData: {}) => void
   }
+
+  const onSubmit = async (data: RegisterFormValues) => {
+    console.log(data)
+
+    const formData = new FormData()
+
+
+    formData.append("username", data.username)
+
+    formData.append("email", data.email)
+
+    formData.append("password", data.password)
+
+    formData.append("profilepic", data.avatar)
+
+
+    registerApi(formData)
+
+  }
+
+
+
 
   const handleAvatarChange = (file?: File) => {
     if (!file) return
@@ -108,16 +130,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Name */}
-            <div className="space-y-1">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" {...register("name")} />
-              {errors.name && (
-                <p className="text-sm text-destructive">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
+
 
             {/* Username */}
             <div className="space-y-1">

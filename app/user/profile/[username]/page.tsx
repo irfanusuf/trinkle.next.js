@@ -5,31 +5,45 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import RenderPosts from "@/components/posts/RenderPosts"
-import { posts } from "@/lib/mockData"
 import { useContext, useEffect } from "react"
 import { Context } from "@/app/Store"
 import { Post, UserProfile } from "@/lib/types"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 
 
 export default function ProfilePage() {
 
   const params = useParams() as { username?: string }
   const username = params?.username ?? ""
-
+  const router = useRouter()
 
   const { user, userPosts, fetchUserDetails, fetchUserPosts } = useContext(Context) as {
+
     user: UserProfile
     userPosts: Post[]
     fetchUserDetails: (username: string) => Promise<string>
     fetchUserPosts: (userId: string) => void
+
   }
 
+
+
+
   useEffect(() => {
+
+
     (async () => {
       const userId = await fetchUserDetails(username)
-      fetchUserPosts(userId)
+      if (userId) {
+        fetchUserPosts(userId)
+      } else {
+        router.push("/explore")
+      }
+
     })()
+
+
+
   }, [])
 
 
