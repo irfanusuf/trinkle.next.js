@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Context } from "@/app/Store"
+import ThemeToggle from "@/components/theme/ThemeToggle"
+import Header from "@/components/layout/Header"
 
 /* ---------------- Schema ---------------- */
 
@@ -83,6 +85,11 @@ export default function RegisterPage() {
   }
 
   return (
+
+    <>
+    {/* //   <ThemeToggle/> */}
+
+    <Header heading="devs_outreach" punchline="Register With Us" link="Login" href="/user/login"/>
     <div className="flex min-h-screen items-center justify-center bg-muted px-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 text-center">
@@ -212,5 +219,7 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
     </div>
+
+    </>
   )
 }

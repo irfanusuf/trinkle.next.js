@@ -8,11 +8,13 @@ import { toast } from 'react-toastify'
 
 
 
+
 export const Context = createContext<any>(null)
 
 const Store = ({ children }: { children: React.ReactNode }) => {
 
     const [store, setStore] = useState({
+        loggedInUserId : "",
         user: {},
         userPosts: [],
         explorePosts: [],
@@ -65,8 +67,10 @@ const Store = ({ children }: { children: React.ReactNode }) => {
                 const response = await axiosInstance.get(`/user/verifyUser`)   // API CALL
                 if (response.status === 200) {
 
+                    setStore((prev) => ({...prev , loggedInUserID : response.data.payload}))
                     return true
                 }
+                router.push("/user/login")
                 return false
 
             } catch (error) {

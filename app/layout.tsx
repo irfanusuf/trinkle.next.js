@@ -86,8 +86,9 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       >
 
 
+         <ToastContainer />
+
         <ThemeProvider>
-          <ToastContainer />
           <Store>
             {children}
           </Store>

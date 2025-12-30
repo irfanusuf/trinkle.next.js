@@ -50,9 +50,9 @@ export default function Hero() {
 
  
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 1.5 }}
         className="mx-auto max-w-6xl px-6 py-28 text-center"
       >
         <motion.h1

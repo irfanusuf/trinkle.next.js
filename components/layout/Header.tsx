@@ -9,12 +9,13 @@ interface headerProps {
   href: string;
 }
 
-export default function Header({
-  heading,
-  punchline,
-  link,
-  href,
-}: headerProps) {
+
+
+
+export default function Header({heading,punchline,link,  href,}: headerProps) 
+
+
+{
   return (
     <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between ">

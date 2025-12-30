@@ -8,7 +8,9 @@ import Header from "@/components/layout/Header";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
-      <Header heading="@devs_outreach" punchline="where devs meet"  link="Explore" href="/explore" /> 
+
+
+      <Header heading="devs_outreach" punchline="where devs meet"  link="Explore" href="/explore" /> 
       <Hero />
       <Metrics/>
       <Features />

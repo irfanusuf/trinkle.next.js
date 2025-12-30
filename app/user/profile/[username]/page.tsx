@@ -9,18 +9,31 @@ import { useContext, useEffect } from "react";
 import { Context } from "@/app/Store";
 import { Post, UserProfile } from "@/lib/types";
 import { useParams, useRouter } from "next/navigation";
+import QuickActions from "./QuickActions";
+import ThemeToggle from "@/components/theme/ThemeToggle";
+
 
 export default function ProfilePage() {
   const params = useParams() as { username?: string };
   const username = params?.username ?? "";
   const router = useRouter();
 
-  const { user, userPosts, fetchUserDetails, fetchUserPosts } = useContext(Context) as {
+  const { user, userPosts, loggedInUserID , fetchUserDetails, fetchUserPosts  , verifyUserApi} = useContext(Context) as {
     user: UserProfile;
     userPosts: Post[];
+    loggedInUserID : string
     fetchUserDetails: (username: string) => Promise<string>;
     fetchUserPosts: (userId: string) => void;
+    verifyUserApi : ()=>void
   };
+
+
+
+  useEffect(()=>{
+    verifyUserApi()
+  }, [])
+
+
 
   useEffect(() => {
     (async () => {
@@ -33,7 +46,13 @@ export default function ProfilePage() {
     })();
   }, [fetchUserDetails, fetchUserPosts]);
 
+
+
+
   return (
+
+    <>
+      <ThemeToggle/>
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="flex flex-col gap-6 md:flex-row">
         <div className="flex justify-center md:w-1/3">
@@ -79,8 +98,12 @@ export default function ProfilePage() {
 
       <Separator className="my-8" />
 
-      {/* Tabs */}
-      <Tabs defaultValue="posts">
+
+      {loggedInUserID === user._id && <QuickActions/>}
+
+
+      {/* Tabs */} 
+      <Tabs defaultValue="posts" className="min-h-96">
         <TabsList className="mx-auto flex w-fit">
           <TabsTrigger value="posts">Posts</TabsTrigger>
           <TabsTrigger value="stories">Stories</TabsTrigger>
@@ -108,5 +131,8 @@ export default function ProfilePage() {
         </TabsContent>
       </Tabs>
     </div>
+
+    </>
+
   );
 }

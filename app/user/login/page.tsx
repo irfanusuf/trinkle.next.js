@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Context } from "@/app/Store"
+import ThemeToggle from "@/components/theme/ThemeToggle"
+import Header from "@/components/layout/Header"
 
 
 /* ---------------- Schema ---------------- */
@@ -54,6 +56,16 @@ export default function LoginPage() {
   }
 
   return (
+
+
+    <>
+
+    {/* <ThemeToggle/>  */}
+
+
+    <Header heading="devs_outreach" punchline="Login to your account" link="SignUp" href="/user/register"/>
+
+   
     <div className="flex min-h-screen items-center justify-center bg-muted px-4">
 
    
@@ -142,11 +154,13 @@ export default function LoginPage() {
 
         <CardFooter className="flex justify-center text-sm text-muted-foreground">
           Don’t have an account?
-          <a href="/register" className="ml-1 underline hover:text-primary">
+          <a href="/user/register" className="ml-1 underline hover:text-primary">
             Sign up
           </a>
         </CardFooter>
       </Card>
     </div>
+
+     </>
   )
 }

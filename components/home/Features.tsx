@@ -1,4 +1,4 @@
-import { Code2, Users, MessageSquare, Rocket } from "lucide-react"
+import { Code2, Users, MessageSquare, Rocket, Github } from "lucide-react"
 
 const features = [
   {
@@ -20,6 +20,11 @@ const features = [
     icon: Rocket,
     title: "Showcase Your Work",
     desc: "Share projects, blogs, and experiments with the community.",
+  },
+  {
+    icon: Github,
+    title: "Create a Git Repo",
+    desc: "Share projects, using Github repo",
   },
 ]
 

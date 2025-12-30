@@ -24,9 +24,12 @@ export default function ExplorePage() {
 
   return (
     <main className="min-h-screen bg-background">
+
       <Header heading="Explore" punchline="Discover what developers are building" link="Home" href="/"/>
+
+
       <ExploreFilters />
-      <div className="mx-auto max-w-4xl px-4 py-6">
+      <div className="mx-auto max-w-4xl px-4 py-6 min-h-screen">
         {/* <RenderPosts posts={explorePosts} layout="feed" />/ */}
         <RenderExplorePosts posts={explorePosts} />
       </div>
